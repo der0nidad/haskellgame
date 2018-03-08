@@ -1,0 +1,32 @@
+module Main(main) where
+
+import Graphics.Gloss
+-- import System.Random
+import Graphics.Gloss.Data.Vector
+import Graphics.Gloss.Geometry.Line
+import Graphics.Gloss.Interface.Pure.Game
+
+width, height, offset :: Int
+width = 300
+height = 300
+offset = 100
+
+window :: Display
+window = InWindow "Pong" (width, height) (offset, offset)
+
+background :: Color
+background = white
+
+main :: IO ()
+main = display window background drawing
+
+drawing :: Picture 
+drawing = pictures [ball, walls]
+  where
+    ball = translate (-10) 40 $ color ballColor $ rectangleSolid 25 40
+    ballColor = dark red
+    walls = translate (35) 30 $ color wallcolor $ circleSolid 20
+    wallcolor =  light green
+
+
+
