@@ -11,32 +11,42 @@ initLoc = (0,0)
 
 data GameState = Game
     {
-        player1 :: Player
-        player2 :: Player
-        gameScore :: Float
+      pLoc :: (Float, Float)
+    , pSpeed :: (Float, Float)
+        -- player1 :: Player
+        -- player2 :: Player
+        -- gameScore :: Float
         -- bullets1 :: [Bullet]
         -- bullets2 :: [Bullet]
 
     } deriving Show
 
 
-data Player = Player
-  {
-    pLoc :: (Float, Float)
-    , pSpeed :: (Float, Float)
-    , isOnTheGeound :: Bool
+-- data Player = Player
+--   {
+--     pLoc :: (Float, Float)
+--     , pSpeed :: (Float, Float)
+--     -- , isOnTheGeound :: Bool
 
-  } deriving Show
-data Bullet = Bullet
-  {
+--   } deriving Show
+-- data Bullet = Bullet
+--   {
 
 
-  }
+--   }
+-- initialPlayer :: Player
+-- initialPlayer = Player
+--   {
+--         pLoc = initLoc
+--         , pSpeed = (0,0)
+
+--   }
+
 
 initialState :: GameState
 initialState = Game
     {
-        pLoc = initLoc
+          pLoc = initLoc
         , pSpeed = (0,0)
     }
 
@@ -72,9 +82,25 @@ render game =
 
 
 
+-- | Update the game by moving the ball and bouncing off walls.
+update :: Float -> GameState -> GameState
+update  seconds =  movePlayer seconds
+
+
+movePlayer :: Float -> GameState -> GameState
+movePlayer seconds game = game  { pLoc = (x', y') }
+    where
+        (x, y) = pLoc   game
+        (vx, vy) = pSpeed  game   
+        x' = x + vx * seconds * 10
+        y' = y + vy * seconds * 10
 
 
 
+
+
+speed :: Float
+speed = 20
 
 -- | Respond to key events.
 handleKeys :: Event -> GameState -> GameState
@@ -83,27 +109,27 @@ handleKeys :: Event -> GameState -> GameState
 handleKeys (EventKey (Char 'x') Down _ _) game =
   game { pLoc = initLoc }
 handleKeys (EventKey (Char 'w') Up _ _) game =
-  game { pSpeed = ((fst (pSpeed game)), (snd  (pSpeed game)) + 2) }
+  game { pSpeed = ((fst (pSpeed game)), (snd  (pSpeed game)) - speed) }
 handleKeys (EventKey (Char 'w') Down _ _) game =
-  game { pSpeed = ((fst (pSpeed game)), (snd  (pSpeed game)) + 2) }
+  game { pSpeed = ((fst (pSpeed game)), (snd  (pSpeed game)) + speed) }
 
 handleKeys (EventKey (Char 'a') Up _ _) game =
-  game { pSpeed = ((fst  (pSpeed game)) - 2, (snd (pSpeed game))) }
+  game { pSpeed = ((fst  (pSpeed game)) + speed, (snd (pSpeed game))) }
 
 handleKeys (EventKey (Char 'a') Down _ _) game =
-  game { pSpeed = ((fst  (pSpeed game)) - 2, (snd (pSpeed game))) }
+  game { pSpeed = ((fst  (pSpeed game)) - speed, (snd (pSpeed game))) }
 
 handleKeys (EventKey (Char 's') Down _ _) game =
-  game { pSpeed = ((fst (pSpeed game)), (snd  (pSpeed game)) - 2) }
+  game { pSpeed = ((fst (pSpeed game)), (snd  (pSpeed game)) - speed) }
 
 handleKeys (EventKey (Char 's') Up _ _) game =
-  game { pSpeed = ((fst (pSpeed game)), (snd  (pSpeed game)) - 2) }
+  game { pSpeed = ((fst (pSpeed game)), (snd  (pSpeed game)) + speed) }
 
 handleKeys (EventKey (Char 'd') Down  _ _) game =
-  game { pSpeed = ((fst (pSpeed game)) + 2, (snd  (pSpeed game)) ) }
+  game { pSpeed = ((fst (pSpeed game)) + speed, (snd  (pSpeed game)) ) }
 
 handleKeys (EventKey (Char 'd') Up _ _) game =
-  game { pSpeed = ((fst (pSpeed game)) + 2, (snd  (pSpeed game)) ) }
+  game { pSpeed = ((fst (pSpeed game)) - speed, (snd  (pSpeed game)) ) }
 
 -- Do nothing for all other events.
 handleKeys _ game = game
@@ -111,15 +137,38 @@ handleKeys _ game = game
 
 
 
--- | Update the game by moving the ball and bouncing off walls.
-update :: Float -> GameState -> GameState
-update  seconds =  movePlayer seconds
 
+-- bumpPlayerLeft :: Universe -> Universe
+-- bumpPlayerLeft u = u
+--   { universePlayer = bump (universePlayer u)
+--   }
+--   where
+--     bump player = player {
+--     playerSpeed = -bumpSpeed }
 
-movePlayer :: Float -> GameState -> GameState
-movePlayer seconds game = game {pLoc = (x', y') }
-    where
-        (x, y) = pLoc game
-        (vx, vy) = pSpeed game   
-        x' = x + vx * seconds * 10
-        y' = y + vy * seconds * 10
+-- -- | Сдвинуть игрока вверх.
+-- bumpPlayerUp :: Universe -> Universe
+-- bumpPlayerUp u = u
+--   { universePlayer = bump (universePlayer u)
+--   }
+--   where
+--     bump player = player {
+--     playerFallingSpeed = jumpSpeed }
+
+-- -- |Сдвинуть игрока вправо.
+-- bumpPlayerRight :: Universe -> Universe
+-- bumpPlayerRight u = u
+--   { universePlayer = bump (universePlayer u)
+--   }
+--   where
+--     bump player = player {
+--     playerSpeed = bumpSpeed }
+
+-- -- | Остановить игрока.
+-- stopPlayer :: Universe -> Universe
+-- stopPlayer u = u
+--   { universePlayer = bump (universePlayer u)
+--   }
+--   where
+--     bump player = player {
+--     playerSpeed = 0}
