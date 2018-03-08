@@ -11,10 +11,27 @@ initLoc = (0,0)
 
 data GameState = Game
     {
-        pLoc :: (Float, Float)
-        , pSpeed :: (Float, Float)
+        player1 :: Player
+        player2 :: Player
+        gameScore :: Float
+        -- bullets1 :: [Bullet]
+        -- bullets2 :: [Bullet]
 
     } deriving Show
+
+
+data Player = Player
+  {
+    pLoc :: (Float, Float)
+    , pSpeed :: (Float, Float)
+    , isOnTheGeound :: Bool
+
+  } deriving Show
+data Bullet = Bullet
+  {
+
+
+  }
 
 initialState :: GameState
 initialState = Game
@@ -54,22 +71,38 @@ render game =
 
 
 
+
+
+
+
+
 -- | Respond to key events.
 handleKeys :: Event -> GameState -> GameState
 
 -- For an 's' keypress, reset the ball to the center.
-handleKeys (EventKey (Char 'x') _ _ _) game =
+handleKeys (EventKey (Char 'x') Down _ _) game =
   game { pLoc = initLoc }
-handleKeys (EventKey (Char 'w') _ _ _) game =
+handleKeys (EventKey (Char 'w') Up _ _) game =
+  game { pSpeed = ((fst (pSpeed game)), (snd  (pSpeed game)) + 2) }
+handleKeys (EventKey (Char 'w') Down _ _) game =
   game { pSpeed = ((fst (pSpeed game)), (snd  (pSpeed game)) + 2) }
 
-handleKeys (EventKey (Char 'a') _ _ _) game =
+handleKeys (EventKey (Char 'a') Up _ _) game =
   game { pSpeed = ((fst  (pSpeed game)) - 2, (snd (pSpeed game))) }
 
-handleKeys (EventKey (Char 's') _ _ _) game =
+handleKeys (EventKey (Char 'a') Down _ _) game =
+  game { pSpeed = ((fst  (pSpeed game)) - 2, (snd (pSpeed game))) }
+
+handleKeys (EventKey (Char 's') Down _ _) game =
   game { pSpeed = ((fst (pSpeed game)), (snd  (pSpeed game)) - 2) }
 
-handleKeys (EventKey (Char 'd') _ _ _) game =
+handleKeys (EventKey (Char 's') Up _ _) game =
+  game { pSpeed = ((fst (pSpeed game)), (snd  (pSpeed game)) - 2) }
+
+handleKeys (EventKey (Char 'd') Down  _ _) game =
+  game { pSpeed = ((fst (pSpeed game)) + 2, (snd  (pSpeed game)) ) }
+
+handleKeys (EventKey (Char 'd') Up _ _) game =
   game { pSpeed = ((fst (pSpeed game)) + 2, (snd  (pSpeed game)) ) }
 
 -- Do nothing for all other events.
