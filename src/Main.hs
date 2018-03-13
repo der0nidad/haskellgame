@@ -11,9 +11,9 @@ initLoc = (0,0)
 
 data GameState = Game
     {
-      pLoc :: (Float, Float)
-    , pSpeed :: (Float, Float)
-        -- player1 :: Player
+    --   pLoc :: (Float, Float)
+    -- , pSpeed :: (Float, Float)
+        player1 :: Player
         -- player2 :: Player
         -- gameScore :: Float
         -- bullets1 :: [Bullet]
@@ -22,33 +22,39 @@ data GameState = Game
     } deriving Show
 
 
--- data Player = Player
---   {
---     pLoc :: (Float, Float)
---     , pSpeed :: (Float, Float)
---     -- , isOnTheGeound :: Bool
+data Player = Player
+  {
+    pLoc :: (Float, Float)
+    , pSpeed :: (Float, Float)
+    -- , isOnTheGeound :: Bool
 
---   } deriving Show
+  } deriving Show
+
 -- data Bullet = Bullet
 --   {
 
 
 --   }
--- initialPlayer :: Player
--- initialPlayer = Player
---   {
---         pLoc = initLoc
---         , pSpeed = (0,0)
+initialPlayer :: Player
+initialPlayer = Player
+  {
+        pLoc = initLoc
+        , pSpeed = (0,0)
 
---   }
+  }
 
 
 initialState :: GameState
 initialState = Game
     {
-          pLoc = initLoc
-        , pSpeed = (0,0)
+      player1 = initialPlayer
     }
+-- initialState :: GameState
+-- initialState = Game
+--     {
+--           pLoc = initLoc
+--         , pSpeed = (0,0)
+--     }
 
 width, height, offset :: Int
 width = 300
@@ -96,6 +102,15 @@ movePlayer seconds game = game  { pLoc = (x', y') }
         y' = y + vy * seconds * 10
 
 
+-- movePlayer :: Float -> GameState -> GameState
+-- movePlayer seconds game = game  { pLoc = (x', y') }
+--     where
+--         (x, y) = pLoc   game
+--         (vx, vy) = pSpeed  game   
+--         x' = x + vx * seconds * 10
+--         y' = y + vy * seconds * 10
+
+
 
 
 
@@ -105,33 +120,36 @@ speed = 20
 -- | Respond to key events.
 handleKeys :: Event -> GameState -> GameState
 
--- For an 's' keypress, reset the ball to the center.
-handleKeys (EventKey (Char 'x') Down _ _) game =
-  game { pLoc = initLoc }
-handleKeys (EventKey (Char 'w') Up _ _) game =
-  game { pSpeed = ((fst (pSpeed game)), (snd  (pSpeed game)) - speed) }
-handleKeys (EventKey (Char 'w') Down _ _) game =
-  game { pSpeed = ((fst (pSpeed game)), (snd  (pSpeed game)) + speed) }
+-- -- For an 's' keypress, reset the ball to the center.
+-- handleKeys (EventKey (Char 'x') Down _ _) game =
+--   game { pLoc = initLoc }
+-- handleKeys (EventKey (Char 'w') Up _ _) game =
+--   game { pSpeed = ((fst (pSpeed game)), (snd  (pSpeed game)) - speed) }
+-- handleKeys (EventKey (Char 'w') Down _ _) game =
+--   game { pSpeed = ((fst (pSpeed game)), (snd  (pSpeed game)) + speed) }
 
-handleKeys (EventKey (Char 'a') Up _ _) game =
-  game { pSpeed = ((fst  (pSpeed game)) + speed, (snd (pSpeed game))) }
+-- handleKeys (EventKey (Char 'a') Up _ _) game =
+--   game { pSpeed = ((fst  (pSpeed game)) + speed, (snd (pSpeed game))) }
 
-handleKeys (EventKey (Char 'a') Down _ _) game =
-  game { pSpeed = ((fst  (pSpeed game)) - speed, (snd (pSpeed game))) }
+-- handleKeys (EventKey (Char 'a') Down _ _) game =
+--   game { pSpeed = ((fst  (pSpeed game)) - speed, (snd (pSpeed game))) }
 
-handleKeys (EventKey (Char 's') Down _ _) game =
-  game { pSpeed = ((fst (pSpeed game)), (snd  (pSpeed game)) - speed) }
+-- handleKeys (EventKey (Char 's') Down _ _) game =
+--   game { pSpeed = ((fst (pSpeed game)), (snd  (pSpeed game)) - speed) }
 
-handleKeys (EventKey (Char 's') Up _ _) game =
-  game { pSpeed = ((fst (pSpeed game)), (snd  (pSpeed game)) + speed) }
+-- handleKeys (EventKey (Char 's') Up _ _) game =
+--   game { pSpeed = ((fst (pSpeed game)), (snd  (pSpeed game)) + speed) }
 
-handleKeys (EventKey (Char 'd') Down  _ _) game =
-  game { pSpeed = ((fst (pSpeed game)) + speed, (snd  (pSpeed game)) ) }
+-- handleKeys (EventKey (Char 'd') Down  _ _) game =
+--   game { pSpeed = ((fst (pSpeed game)) + speed, (snd  (pSpeed game)) ) }
 
-handleKeys (EventKey (Char 'd') Up _ _) game =
-  game { pSpeed = ((fst (pSpeed game)) - speed, (snd  (pSpeed game)) ) }
+-- handleKeys (EventKey (Char 'd') Up _ _) game =
+--   game { pSpeed = ((fst (pSpeed game)) - speed, (snd  (pSpeed game)) ) }
 
 -- Do nothing for all other events.
+
+handleUniverse (EventKey (SpecialKey KeyRight) Down _ _) u = movePlayerRight u
+handleUniverse (EventKey (SpecialKey KeyLeft) Up _ _) u = stopPlayer u
 handleKeys _ game = game
 
 
@@ -155,20 +173,20 @@ handleKeys _ game = game
 --     bump player = player {
 --     playerFallingSpeed = jumpSpeed }
 
--- -- |Сдвинуть игрока вправо.
--- bumpPlayerRight :: Universe -> Universe
--- bumpPlayerRight u = u
---   { universePlayer = bump (universePlayer u)
---   }
---   where
---     bump player = player {
---     playerSpeed = bumpSpeed }
+-- |Сдвинуть игрока вправо.
+movePlayerRight :: GameState -> GameState
+movePlayerRight u = u
+  { player1 = bump (player1 u)
+  }
+  where
+    bump player = player {
+    pSpeed = 10 }
 
--- -- | Остановить игрока.
--- stopPlayer :: Universe -> Universe
--- stopPlayer u = u
---   { universePlayer = bump (universePlayer u)
---   }
---   where
---     bump player = player {
---     playerSpeed = 0}
+-- | Остановить игрока.
+stopPlayer :: GameState -> GameState
+stopPlayer u = u
+  { player1 = bump (player1 u)
+  }
+  where
+    bump player = player {
+    playerSpeed = 0}
