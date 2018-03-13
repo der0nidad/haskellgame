@@ -125,42 +125,18 @@ speed = 20
 
 -- | Respond to key events.
 handleKeys :: Event -> GameState -> GameState
-handlekeys (EventKey (SpecialKey KeyLeft) Down _ _ ) game = movePlayerLeft game
-handlekeys (EventKey (SpecialKey KeyLeft) Up _ _ ) game = stopPlayer game
-handlekeys (EventKey (Char 'd') Down _ _ ) game = movePlayerRight game
-handlekeys (EventKey (Char 'd') Up _ _ ) game = stopPlayer game
+handleKeys (EventKey (Char 'a') Down _ _ ) game = movePlayerLeft game
+handleKeys (EventKey (Char 'a') Up _ _ ) game   = stopPlayer game
+handleKeys (EventKey (Char 'd') Down _ _ ) game           = movePlayerRight game
+handleKeys (EventKey (Char 'd') Up _ _ ) game             = stopPlayer game
+handleKeys (EventKey (Char 'w') Down _ _ ) game = movePlayerLeft game
+handleKeys (EventKey (Char 'w') Up _ _ ) game   = stopPlayer game
+handleKeys (EventKey (Char 's') Down _ _ ) game           = movePlayerRight game
+handleKeys (EventKey (Char 's') Up _ _ ) game             = stopPlayer game
+handleKeys (EventKey (Char 'x') _ _ _ ) game              = initialState
+handleKeys _ game                                         =  game
 
 
-
-
--- -- For an 's' keypress, reset the ball to the center.
--- handleKeys (EventKey (Char 'x') Down _ _) game =
---   game { pLoc = initLoc }
--- handleKeys (EventKey (Char 'w') Up _ _) game =
---   game { pSpeed = ((fst (pSpeed game)), (snd  (pSpeed game)) - speed) }
--- handleKeys (EventKey (Char 'w') Down _ _) game =
---   game { pSpeed = ((fst (pSpeed game)), (snd  (pSpeed game)) + speed) }
-
--- handleKeys (EventKey (Char 'a') Up _ _) game =
---   game { pSpeed = ((fst  (pSpeed game)) + speed, (snd (pSpeed game))) }
-
--- handleKeys (EventKey (Char 'a') Down _ _) game =
---   game { pSpeed = ((fst  (pSpeed game)) - speed, (snd (pSpeed game))) }
-
--- handleKeys (EventKey (Char 's') Down _ _) game =
---   game { pSpeed = ((fst (pSpeed game)), (snd  (pSpeed game)) - speed) }
-
--- handleKeys (EventKey (Char 's') Up _ _) game =
---   game { pSpeed = ((fst (pSpeed game)), (snd  (pSpeed game)) + speed) }
-
--- handleKeys (EventKey (Char 'd') Down  _ _) game =
---   game { pSpeed = ((fst (pSpeed game)) + speed, (snd  (pSpeed game)) ) }
-
--- handleKeys (EventKey (Char 'd') Up _ _) game =
---   game { pSpeed = ((fst (pSpeed game)) - speed, (snd  (pSpeed game)) ) }
-
--- Do nothing for all other events.
-handleKeys _ game = game
 
 
 
